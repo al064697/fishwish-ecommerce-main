@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5433}/${PGDATABASE:fishwish}
+    username: ${PGUSER:fishwish}
+    password: ${PGPASSWORD:fishwish123}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false  # ⚠️ CAMBIAR A FALSE EN PRODUCCIÓN
+    properties:
+      hibernate:
+        format_sql: false
+
+app:
+  product-service:
+    url: ${PRODUCT_SERVICE_URL:http://localhost:8081/api/products}
+
+# payment settings were removed (Stripe integration reverted)

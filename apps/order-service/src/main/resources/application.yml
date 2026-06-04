@@ -1,0 +1,31 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false  # ⚠️ CAMBIAR A FALSE EN PRODUCCIÓN
+    properties:
+      hibernate:
+        format_sql: false
+
+app:
+  product-service:
+    url: ${PRODUCT_SERVICE_URL:http://localhost:8081/api/products}
+
+# ✅ CORRECCIÓN CRÍTICA: Usar variables ENV sin hardcodear
+payment:
+  stripe:
+    secret-key: ${STRIPE_SECRET_KEY:}  # Valor vacío por defecto si no existe
+    public-key: ${STRIPE_PUBLIC_KEY:}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}

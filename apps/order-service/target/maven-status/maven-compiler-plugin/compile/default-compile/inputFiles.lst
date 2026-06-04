@@ -1,0 +1,10 @@
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/OrderApplication.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/client/ProductServiceClient.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/config/CorsConfig.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/config/RestTemplateConfig.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/controller/OrderController.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/dto/ProductDTO.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/model/Order.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/model/OrderItem.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/repository/OrderRepository.java
+/Users/sebastianeligio/Projects/fishwish-ecommerce-main/apps/order-service/src/main/java/com/fishwish/order/service/OrderService.java
