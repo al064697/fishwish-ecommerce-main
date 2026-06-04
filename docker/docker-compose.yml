@@ -35,9 +35,11 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/fishwish
-      - SPRING_DATASOURCE_USERNAME=fishwish
-      - SPRING_DATASOURCE_PASSWORD=fishwish123
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGDATABASE=fishwish
+      - PGUSER=fishwish
+      - PGPASSWORD=fishwish123
     depends_on:
       - postgres
 
@@ -47,15 +49,17 @@ services:
       dockerfile: Dockerfile
     container_name: fishwish-order-service
     ports:
-      - "8084:8084"
+      - "8082:8082"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/fishwish
-      - SPRING_DATASOURCE_USERNAME=fishwish
-      - SPRING_DATASOURCE_PASSWORD=fishwish123
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGDATABASE=fishwish
+      - PGUSER=fishwish
+      - PGPASSWORD=fishwish123
+      - PRODUCT_SERVICE_URL=http://product-service:8081/api/products
     depends_on:
       - postgres
+      - product-service
 
 volumes:
   postgres_data:

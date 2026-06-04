@@ -49,3 +49,4 @@ MODELOS_DATOS_Y_DEPENDENCIAS.md
 
 # O si prefieres ignorar todos los archivos Markdown de la raíz
 /*.md
+!README.md
