@@ -76,7 +76,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
           <div className="p-6 border-t bg-gray-50">
             <div className="flex justify-between text-xl font-semibold mb-6">
               <span>Total</span>
-              <span>${totalPrice()} MXN</span>
+              <span>${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</span>
             </div>
 
             <div className="flex flex-col gap-3">

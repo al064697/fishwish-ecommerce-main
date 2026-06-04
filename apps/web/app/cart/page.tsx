@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, removeFromCart, increaseQuantity, decreaseQuantity, totalPrice, isEmpty } = useCartStore();
+  const { items, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, totalPrice, isEmpty } = useCartStore();
 
   // Si el carrito está vacío
   if (isEmpty()) {
@@ -153,6 +153,12 @@ export default function CartPage() {
               >
                 ← Seguir comprando
               </Link>
+              <button
+                onClick={clearCart}
+                className="ml-6 inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold transition"
+              >
+                Vaciar carrito
+              </button>
             </div>
           </div>
 

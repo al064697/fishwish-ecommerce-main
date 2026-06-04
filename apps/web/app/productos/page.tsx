@@ -46,6 +46,11 @@ export default function ProductosPage() {
   }, []);
 
   const handleAddToCart = (product: Product) => {
+    if (product.stock <= 0) {
+      toast.error('Este producto esta agotado');
+      return;
+    }
+
     addToCart(product);
     toast.success(`¡${product.name} añadido al carrito!`);
   };
@@ -180,8 +185,13 @@ export default function ProductosPage() {
                   <div className="bg-gray-50 p-4 rounded-2xl mb-6">
                     <div className="flex justify-between text-sm text-gray-600 mb-1">
                       <span>Disponibilidad:</span>
-                      <span className="font-bold text-green-600">{product.stock} unidades</span>
+                      <span className={`font-bold ${product.stock <= 5 ? 'text-amber-600' : 'text-green-600'}`}>
+                        {product.stock > 0 ? `${product.stock} unidades` : 'Agotado'}
+                      </span>
                     </div>
+                    {product.stock > 0 && product.stock <= 5 && (
+                      <p className="mb-2 text-sm font-semibold text-amber-600">Últimas piezas disponibles</p>
+                    )}
                     <div className="flex justify-between text-sm text-gray-600">
                       <span>Ingredientes:</span>
                       <span className="font-medium">100% Pescado</span>
@@ -195,10 +205,10 @@ export default function ProductosPage() {
                     </div>
                     <button 
                       onClick={() => handleAddToCart(product)}
-                      disabled={product.stock === 0}
+                      disabled={product.stock <= 0}
                       className="bg-[#00A3E0] hover:bg-[#0088c2] disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md"
                     >
-                      {product.stock === 0 ? 'Agotado' : 'Añadir'}
+                      {product.stock <= 0 ? 'Agotado' : 'Añadir'}
                     </button>
                   </div>
                 </div>

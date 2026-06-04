@@ -60,6 +60,11 @@ export default function Home() {
 
   // Función que se llama cuando el usuario hace clic en "Agregar al carrito"
   const handleAddToCart = (product: Product) => {
+    if (product.stock <= 0) {
+      toast.error('Este producto esta agotado');
+      return;
+    }
+
     addToCart(product);      // Llamamos a la función del store de Zustand
     toast.success(`¡${product.name} añadido al carrito!`, {
       description: 'Ve al carrito para finalizar tu compra.',
@@ -173,6 +178,18 @@ export default function Home() {
                   <h3 className="text-2xl font-semibold text-gray-800 mb-3">{product.name}</h3>
                   <p className="text-gray-600 mb-8 leading-relaxed">{product.description}</p>
 
+                  <div className="mb-6 rounded-2xl bg-gray-50 p-4 text-sm">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Disponibilidad</span>
+                      <span className={`font-bold ${product.stock <= 5 ? 'text-amber-600' : 'text-green-600'}`}>
+                        {product.stock > 0 ? `${product.stock} unidades` : 'Agotado'}
+                      </span>
+                    </div>
+                    {product.stock > 0 && product.stock <= 5 && (
+                      <p className="mt-2 font-semibold text-amber-600">Últimas piezas disponibles</p>
+                    )}
+                  </div>
+
                 <div className="flex justify-between items-end">
                   <div>
                     <span className="text-4xl font-bold text-[#003087]"> ${product.price}</span>
@@ -180,9 +197,10 @@ export default function Home() {
                   </div>
                   <button 
                     onClick={() => handleAddToCart(product)}   // Llamamos a la función al hacer clic
-                    className="bg-[#00A3E0] hover:bg-[#0088c2] text-white px-8 py-4 rounded-2xl font-semibold transition-all active:scale-95"
+                    disabled={product.stock <= 0}
+                    className="bg-[#00A3E0] hover:bg-[#0088c2] disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-8 py-4 rounded-2xl font-semibold transition-all active:scale-95"
                   >
-                    Agregar al carrito
+                    {product.stock <= 0 ? 'Agotado' : 'Agregar al carrito'}
                   </button>
                 </div>
               </div>

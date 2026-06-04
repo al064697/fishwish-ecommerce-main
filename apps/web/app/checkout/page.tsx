@@ -12,6 +12,21 @@ type CheckoutForm = {
   phone: string;
 };
 
+const validateCheckoutForm = (form: CheckoutForm) => {
+  const customerName = form.customerName.trim();
+  const address = form.address.trim();
+  const city = form.city.trim();
+  const phone = form.phone.trim();
+  const phoneDigits = phone.replace(/\D/g, '');
+
+  if (customerName.length < 3) return 'Escribe el nombre completo del cliente.';
+  if (address.length < 5) return 'Escribe una direccion de entrega mas completa.';
+  if (city.length < 3) return 'Escribe la ciudad de entrega.';
+  if (phoneDigits.length < 10) return 'Escribe un telefono valido de al menos 10 digitos.';
+
+  return null;
+};
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCartStore();
@@ -31,8 +46,16 @@ export default function CheckoutPage() {
   const submitOrder = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (isSubmitting) return;
+
     if (items.length === 0) {
       router.push('/cart');
+      return;
+    }
+
+    const validationError = validateCheckoutForm(form);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -41,31 +64,55 @@ export default function CheckoutPage() {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_ORDER_URL || 'http://localhost:8082';
+      const orderTotal = totalPrice();
+      const orderPayload = {
+        customerName: form.customerName.trim(),
+        address: form.address.trim(),
+        city: form.city.trim(),
+        phone: form.phone.trim(),
+        items: items.map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+        })),
+      };
+
       const response = await fetch(`${backendUrl}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerName: form.customerName.trim(),
-          address: form.address.trim(),
-          city: form.city.trim(),
-          phone: form.phone.trim(),
-          items: items.map((item) => ({
-            productId: item.id,
-            quantity: item.quantity,
-          })),
-        }),
+        body: JSON.stringify(orderPayload),
       });
 
       if (!response.ok) {
         const message = await response.text();
-        throw new Error(message || 'No se pudo crear el pedido.');
+        throw new Error(message || 'No se pudo crear el pedido. Revisa el stock o intenta de nuevo.');
       }
 
       const savedOrder = await response.json();
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(
+          'fishwish-last-order',
+          JSON.stringify({
+            id: savedOrder.id,
+            customerName: orderPayload.customerName,
+            total: orderTotal,
+            items: items.map((item) => ({
+              id: item.id,
+              name: item.name,
+              presentation: item.presentation,
+              price: item.price,
+              quantity: item.quantity,
+            })),
+          })
+        );
+      }
       clearCart();
-      router.push(`/order-confirmation?id=${savedOrder.id}`);
+      router.push(`/order-confirmation?id=${savedOrder.id}&total=${orderTotal}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo crear el pedido.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'No se pudo crear el pedido. Verifica que el servidor de ordenes este encendido.'
+      );
       setIsSubmitting(false);
     }
   };
@@ -123,7 +170,7 @@ export default function CheckoutPage() {
             <p className="text-gray-600 mb-8">Ingresa tus datos de entrega para registrar el pedido.</p>
 
             {error && (
-              <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <div role="alert" className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                 {error}
               </div>
             )}
@@ -136,6 +183,8 @@ export default function CheckoutPage() {
                 <input
                   id="customerName"
                   required
+                  minLength={3}
+                  autoComplete="name"
                   value={form.customerName}
                   onChange={(event) => updateField('customerName', event.target.value)}
                   className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
@@ -149,6 +198,8 @@ export default function CheckoutPage() {
                 <input
                   id="address"
                   required
+                  minLength={5}
+                  autoComplete="street-address"
                   value={form.address}
                   onChange={(event) => updateField('address', event.target.value)}
                   className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
@@ -163,6 +214,8 @@ export default function CheckoutPage() {
                   <input
                     id="city"
                     required
+                    minLength={3}
+                    autoComplete="address-level2"
                     value={form.city}
                     onChange={(event) => updateField('city', event.target.value)}
                     className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
@@ -176,6 +229,10 @@ export default function CheckoutPage() {
                   <input
                     id="phone"
                     required
+                    minLength={10}
+                    inputMode="tel"
+                    autoComplete="tel"
+                    placeholder="10 digitos"
                     value={form.phone}
                     onChange={(event) => updateField('phone', event.target.value)}
                     className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
@@ -188,8 +245,11 @@ export default function CheckoutPage() {
                 disabled={isSubmitting}
                 className="w-full bg-[#003087] text-white py-4 rounded-xl font-semibold hover:bg-[#002266] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
               >
-                {isSubmitting ? 'Registrando pedido...' : 'Registrar pedido'}
+                {isSubmitting ? 'Procesando pedido...' : 'Registrar pedido'}
               </button>
+              <p className="text-center text-xs text-gray-500">
+                Al registrar el pedido, apartamos el stock y nos pondremos en contacto para confirmar la entrega.
+              </p>
             </form>
           </section>
 
