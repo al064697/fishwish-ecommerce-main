@@ -6,9 +6,9 @@ spring:
     name: order-service
 
   datasource:
-    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5433}/${PGDATABASE:fishwish}
-    username: ${PGUSER:fishwish}
-    password: ${PGPASSWORD:fishwish123}
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,5 +22,3 @@ spring:
 app:
   product-service:
     url: ${PRODUCT_SERVICE_URL:http://localhost:8081/api/products}
-
-# payment settings were removed (Stripe integration reverted)

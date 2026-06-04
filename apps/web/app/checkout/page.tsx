@@ -1,145 +1,223 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import { useSearchParams } from 'next/navigation';
-import CheckoutForm from '../payment/CheckoutForm';
-import { useCartStore } from '../lib/cartStore';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
+import { useCartStore } from '../lib/cartStore';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+type CheckoutForm = {
+  customerName: string;
+  address: string;
+  city: string;
+  phone: string;
+};
 
-// 1. Componente interno con lógica de checkout
-function CheckoutContent() {
-  const [clientSecret, setClientSecret] = useState("");
-  const { items, totalPrice } = useCartStore();
-  
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId') || "ORD-GENERICA"; 
+export default function CheckoutPage() {
+  const router = useRouter();
+  const { items, totalPrice, clearCart } = useCartStore();
+  const [form, setForm] = useState<CheckoutForm>({
+    customerName: '',
+    address: '',
+    city: '',
+    phone: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const backendUrl = process.env.NEXT_PUBLIC_ORDER_URL || 'http://localhost:8084';
+  const updateField = (field: keyof CheckoutForm, value: string) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
 
-    fetch(`${backendUrl}/api/payments/create-intent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        amount: Math.round(totalPrice() * 100), // Convertir a centavos
-        orderId: orderId 
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret))
-      .catch((err) => console.error("Error al obtener el intent:", err));
-  }, [orderId, totalPrice]);
+  const submitOrder = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  const appearance = { theme: 'flat' as const };
-  const options = { clientSecret, appearance };
+    if (items.length === 0) {
+      router.push('/cart');
+      return;
+    }
 
-  // Si el carrito está vacío
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_ORDER_URL || 'http://localhost:8082';
+      const response = await fetch(`${backendUrl}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: form.customerName.trim(),
+          address: form.address.trim(),
+          city: form.city.trim(),
+          phone: form.phone.trim(),
+          items: items.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || 'No se pudo crear el pedido.');
+      }
+
+      const savedOrder = await response.json();
+      clearCart();
+      router.push(`/order-confirmation?id=${savedOrder.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo crear el pedido.');
+      setIsSubmitting(false);
+    }
+  };
+
   if (items.length === 0) {
     return (
-      <div className="max-w-md mx-auto mt-10 p-6 text-center">
-        <div className="text-6xl mb-4">🛒</div>
-        <h2 className="text-2xl font-bold mb-4">Carrito vacío</h2>
-        <p className="text-gray-600 mb-6">No hay productos para procesar el pago.</p>
-        <Link 
-          href="/productos" 
-          className="inline-block bg-[#003087] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#002266]"
-        >
-          Volver a productos
-        </Link>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+        <div className="max-w-md w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100">
+          <div className="text-6xl mb-4">🛒</div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">Tu carrito está vacío</h1>
+          <p className="text-gray-600 mb-6">Agrega productos antes de finalizar tu compra.</p>
+          <Link
+            href="/productos"
+            className="inline-block bg-[#003087] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#002266] transition"
+          >
+            Ver productos
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 px-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Lado izquierdo: Formulario de pago */}
-        <div className="md:col-span-2">
-          <div className="p-6 shadow-xl rounded-xl bg-white">
-            <h1 className="text-2xl font-bold mb-6">Finalizar Compra</h1>
-            
-            {clientSecret ? (
-              <Elements options={options} stripe={stripePromise}>
-                <CheckoutForm orderId={orderId} />
-              </Elements>
-            ) : (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin">
-                  <svg className="h-8 w-8 text-[#00A3E0]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                </div>
-                <p className="ml-3">Cargando pasarela segura...</p>
-              </div>
-            )}
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+              🐟
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
+              <p className="text-xs opacity-90">Snacks naturales • Campeche</p>
+            </div>
+          </Link>
+          <nav className="hidden md:flex gap-8 text-sm font-medium">
+            <Link href="/" className="hover:text-[#00A3E0] transition-colors">Inicio</Link>
+            <Link href="/productos" className="hover:text-[#00A3E0] transition-colors">Productos</Link>
+            <Link href="/about" className="hover:text-[#00A3E0] transition-colors">Nosotros</Link>
+            <Link href="/contacto" className="hover:text-[#00A3E0] transition-colors">Contacto</Link>
+          </nav>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-6 py-12">
+        <div className="mb-8">
+          <Link href="/cart" className="text-[#003087] hover:text-[#002266] font-semibold">
+            ← Volver al carrito
+          </Link>
         </div>
 
-        {/* Lado derecho: Resumen del pedido */}
-        <div className="md:col-span-1">
-          <div className="p-6 shadow-xl rounded-xl bg-white sticky top-24">
-            <h2 className="text-xl font-bold mb-6">Resumen del Pedido</h2>
-            
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <section className="lg:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Finalizar compra</h1>
+            <p className="text-gray-600 mb-8">Ingresa tus datos de entrega para registrar el pedido.</p>
+
+            {error && (
+              <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={submitOrder} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="customerName">
+                  Nombre completo
+                </label>
+                <input
+                  id="customerName"
+                  required
+                  value={form.customerName}
+                  onChange={(event) => updateField('customerName', event.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="address">
+                  Dirección
+                </label>
+                <input
+                  id="address"
+                  required
+                  value={form.address}
+                  onChange={(event) => updateField('address', event.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="city">
+                    Ciudad
+                  </label>
+                  <input
+                    id="city"
+                    required
+                    value={form.city}
+                    onChange={(event) => updateField('city', event.target.value)}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="phone">
+                    Teléfono
+                  </label>
+                  <input
+                    id="phone"
+                    required
+                    value={form.phone}
+                    onChange={(event) => updateField('phone', event.target.value)}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[#003087] text-white py-4 rounded-xl font-semibold hover:bg-[#002266] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+              >
+                {isSubmitting ? 'Registrando pedido...' : 'Registrar pedido'}
+              </button>
+            </form>
+          </section>
+
+          <aside className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-fit lg:sticky lg:top-32">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Resumen</h2>
             <div className="space-y-4 mb-6">
               {items.map((item) => (
-                <div key={item.id} className="flex justify-between border-b pb-3">
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-800">{item.name}</p>
-                    <p className="text-xs text-gray-500">{item.presentation}</p>
-                    <p className="text-sm text-gray-600">x{item.quantity}</p>
+                <div key={item.id} className="flex justify-between gap-4 border-b border-gray-100 pb-4">
+                  <div>
+                    <p className="font-semibold text-gray-900">{item.name}</p>
+                    <p className="text-sm text-gray-500">{item.presentation}</p>
+                    <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-800">
-                      ${(item.price * item.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                    </p>
-                  </div>
+                  <p className="font-semibold text-gray-900 whitespace-nowrap">
+                    ${(item.price * item.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                  </p>
                 </div>
               ))}
             </div>
-
-            <div className="border-t-2 pt-4">
-              <div className="flex justify-between mb-4">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
-              </div>
-              
-              <div className="flex justify-between mb-4">
-                <span className="text-gray-600">Envío</span>
-                <span className="text-green-600 font-medium">Gratis</span>
-              </div>
-
-              <div className="flex justify-between text-lg font-bold bg-blue-50 p-4 rounded-lg">
-                <span>Total</span>
-                <span className="text-[#00A3E0]">${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</span>
-              </div>
+            <div className="flex justify-between text-lg font-bold bg-blue-50 p-4 rounded-xl">
+              <span>Total</span>
+              <span className="text-[#00A3E0]">
+                ${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
+              </span>
             </div>
-
-            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700">
-              ✅ Pago seguro con Stripe
-              <br />
-              🔒 Tu información está protegida
-            </div>
-          </div>
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
-  );
-}
-
-// 2. El export principal solo envuelve al contenido en el "límite" de Suspense
-export default function CheckoutPage() {
-  return (
-    <Suspense fallback={
-      <div className="max-w-md mx-auto mt-10 p-6 text-center">
-        <p>Cargando información de pago...</p>
-      </div>
-    }>
-      <CheckoutContent />
-    </Suspense>
   );
 }

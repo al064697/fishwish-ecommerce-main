@@ -6,9 +6,9 @@ spring:
     name: product-service
 
   datasource:
-    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5433}/${PGDATABASE:fishwish}
-    username: ${PGUSER:fishwish}
-    password: ${PGPASSWORD:fishwish123}
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:

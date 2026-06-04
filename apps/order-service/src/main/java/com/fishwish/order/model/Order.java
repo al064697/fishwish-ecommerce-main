@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -60,50 +59,4 @@ public class Order {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-
-    // ✅ NUEVOS CAMPOS PARA STRIPE
-    @Column(unique = true, nullable = true)
-    private String stripePaymentIntentId;  // Ej: "pi_1A2B3C4D"
-    
-    @Column(nullable = true)
-    private String paymentStatus = "PENDING";  // "PENDING", "SUCCEEDED", "FAILED", "CANCELED"
-    
-    @Column(nullable = true)
-    private LocalDateTime paidAt;  // Cuándo se confirmó el pago
-    
-    @Column(nullable = true)
-    private String paymentErrorMessage;  // Si falla, guardar motivo
-    
-    // Getters y Setters
-    public String getStripePaymentIntentId() {
-        return stripePaymentIntentId;
-    }
-    
-    public void setStripePaymentIntentId(String stripePaymentIntentId) {
-        this.stripePaymentIntentId = stripePaymentIntentId;
-    }
-    
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-    
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-    
-    public LocalDateTime getPaidAt() {
-        return paidAt;
-    }
-    
-    public void setPaidAt(LocalDateTime paidAt) {
-        this.paidAt = paidAt;
-    }
-    
-    public String getPaymentErrorMessage() {
-        return paymentErrorMessage;
-    }
-    
-    public void setPaymentErrorMessage(String paymentErrorMessage) {
-        this.paymentErrorMessage = paymentErrorMessage;
-    }
 }

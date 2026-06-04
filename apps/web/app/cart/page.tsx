@@ -207,11 +207,9 @@ export default function CartPage() {
                 </button>
               </div>
 
-              {/* Información de seguridad */}
+              {/* Información del pedido */}
               <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700 text-center">
-                ✅ Pago seguro con Stripe
-                <br />
-                🔒 Tu información está protegida
+                Registra tu pedido y nos pondremos en contacto para coordinar la entrega.
               </div>
             </div>
           </div>
