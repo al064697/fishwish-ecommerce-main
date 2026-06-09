@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { Fish } from '../../components/ui/FishIcon';
+import { Cart3 } from 'react-bootstrap-icons';
 import { useCartStore } from '../lib/cartStore';
 
 type CheckoutForm = {
@@ -119,11 +121,11 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
-        <div className="max-w-md w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100">
-          <div className="text-6xl mb-4">🛒</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">Tu carrito está vacío</h1>
-          <p className="text-gray-600 mb-6">Agrega productos antes de finalizar tu compra.</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-6">
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="mb-4 flex justify-center text-gray-400 dark:text-gray-500"><Cart3 size={56} /></div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Tu carrito está vacío</h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">Agrega productos antes de finalizar tu compra.</p>
           <Link
             href="/productos"
             className="inline-block bg-[#003087] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#002266] transition"
@@ -136,12 +138,12 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-              🐟
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
+              <Fish size={26} color="#003087" />
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
@@ -165,9 +167,9 @@ export default function CheckoutPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <section className="lg:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Finalizar compra</h1>
-            <p className="text-gray-600 mb-8">Ingresa tus datos de entrega para registrar el pedido.</p>
+          <section className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Finalizar compra</h1>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">Ingresa tus datos de entrega para registrar el pedido.</p>
 
             {error && (
               <div role="alert" className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -177,7 +179,7 @@ export default function CheckoutPage() {
 
             <form onSubmit={submitOrder} className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="customerName">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" htmlFor="customerName">
                   Nombre completo
                 </label>
                 <input
@@ -187,12 +189,12 @@ export default function CheckoutPage() {
                   autoComplete="name"
                   value={form.customerName}
                   onChange={(event) => updateField('customerName', event.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                  className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="address">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" htmlFor="address">
                   Dirección
                 </label>
                 <input
@@ -202,13 +204,13 @@ export default function CheckoutPage() {
                   autoComplete="street-address"
                   value={form.address}
                   onChange={(event) => updateField('address', event.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                  className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="city">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" htmlFor="city">
                     Ciudad
                   </label>
                   <input
@@ -218,12 +220,12 @@ export default function CheckoutPage() {
                     autoComplete="address-level2"
                     value={form.city}
                     onChange={(event) => updateField('city', event.target.value)}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                    className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="phone">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" htmlFor="phone">
                     Teléfono
                   </label>
                   <input
@@ -235,7 +237,7 @@ export default function CheckoutPage() {
                     placeholder="10 digitos"
                     value={form.phone}
                     onChange={(event) => updateField('phone', event.target.value)}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
+                    className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-[#00A3E0] focus:ring-2 focus:ring-[#00A3E0]/20"
                   />
                 </div>
               </div>
@@ -253,24 +255,24 @@ export default function CheckoutPage() {
             </form>
           </section>
 
-          <aside className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-fit lg:sticky lg:top-32">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Resumen</h2>
+          <aside className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 h-fit lg:sticky lg:top-32">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Resumen</h2>
             <div className="space-y-4 mb-6">
               {items.map((item) => (
-                <div key={item.id} className="flex justify-between gap-4 border-b border-gray-100 pb-4">
+                <div key={item.id} className="flex justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
                   <div>
-                    <p className="font-semibold text-gray-900">{item.name}</p>
-                    <p className="text-sm text-gray-500">{item.presentation}</p>
-                    <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">{item.name}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{item.presentation}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Cantidad: {item.quantity}</p>
                   </div>
-                  <p className="font-semibold text-gray-900 whitespace-nowrap">
+                  <p className="font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                     ${(item.price * item.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                   </p>
                 </div>
               ))}
             </div>
-            <div className="flex justify-between text-lg font-bold bg-blue-50 p-4 rounded-xl">
-              <span>Total</span>
+            <div className="flex justify-between text-lg font-bold bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
+              <span className="text-gray-900 dark:text-white">Total</span>
               <span className="text-[#00A3E0]">
                 ${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
               </span>

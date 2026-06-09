@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { Fish } from '../../components/ui/FishIcon';
+import { Cart3 } from 'react-bootstrap-icons';
 import { useCartStore } from '../lib/cartStore';
 import CartModal from '../../components/ui/CartModal';
 
@@ -61,13 +63,13 @@ export default function ProductosPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans flex flex-col">
       {/* HEADER */}
       <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-              🐟
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
+              <Fish size={26} color="#003087" />
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
@@ -87,7 +89,7 @@ export default function ProductosPage() {
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl transition-all"
           >
-            <span className="text-2xl">🛒</span>
+            <Cart3 size={22} />
             <div className="text-left">
               <div className="text-sm font-medium">Carrito</div>
               <div className="text-xs opacity-75">
@@ -111,8 +113,8 @@ export default function ProductosPage() {
       <section className="max-w-7xl mx-auto px-6 py-12 flex-grow">
         
         {/* Filters */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-12 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 md:mb-0 ml-2">Filtrar por tamaño:</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-12 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 ml-2">Filtrar por tamaño:</h2>
           <div className="flex gap-2">
             <button 
               onClick={() => setFilter('all')} 
@@ -165,12 +167,12 @@ export default function ProductosPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {filteredProducts.map((product) => (
-              <div 
+              <div
                 key={product.id}
-                className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col"
+                className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col"
               >
                 <div className="h-64 bg-gradient-to-br from-[#003087] to-[#00A3E0] flex items-center justify-center relative">
-                  <span className="text-8xl">🐟</span>
+                  <Fish size={80} color="white" />
                   <div className="absolute top-4 right-4 bg-white text-[#003087] px-4 py-1.5 rounded-xl font-bold shadow-sm">
                     {product.presentation}
                   </div>
@@ -178,11 +180,11 @@ export default function ProductosPage() {
 
                 <div className="p-8 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-2xl font-bold text-gray-900">{product.name}</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{product.name}</h3>
                   </div>
-                  <p className="text-gray-600 mb-6 flex-grow">{product.description}</p>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">{product.description}</p>
 
-                  <div className="bg-gray-50 p-4 rounded-2xl mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-2xl mb-6">
                     <div className="flex justify-between text-sm text-gray-600 mb-1">
                       <span>Disponibilidad:</span>
                       <span className={`font-bold ${product.stock <= 5 ? 'text-amber-600' : 'text-green-600'}`}>
@@ -200,8 +202,8 @@ export default function ProductosPage() {
 
                   <div className="flex justify-between items-center mt-auto">
                     <div>
-                      <span className="text-3xl font-black text-[#003087]">${product.price}</span>
-                      <span className="text-gray-500 font-medium"> MXN</span>
+                      <span className="text-3xl font-black text-[#003087] dark:text-[#00A3E0]">${product.price}</span>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium"> MXN</span>
                     </div>
                     <button 
                       onClick={() => handleAddToCart(product)}
@@ -223,7 +225,7 @@ export default function ProductosPage() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
             <h3 className="text-2xl font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
-              <span>🐟</span> FishWish
+              <Fish size={18} /> FishWish
             </h3>
             <p className="opacity-80">Salud en cada mordida. <br/>Snacks naturales de Campeche.</p>
           </div>

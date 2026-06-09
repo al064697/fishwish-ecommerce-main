@@ -3,6 +3,8 @@
 import { useCartStore } from '../lib/cartStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Fish } from '../../components/ui/FishIcon';
+import { Cart3 } from 'react-bootstrap-icons';
 
 export default function CartPage() {
   const router = useRouter();
@@ -11,13 +13,13 @@ export default function CartPage() {
   // Si el carrito está vacío
   if (isEmpty()) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
           <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-                🐟
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
+                <Fish size={26} color="#003087" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
@@ -35,10 +37,10 @@ export default function CartPage() {
 
         {/* Carrito Vacío */}
         <div className="max-w-2xl mx-auto px-6 py-20 text-center">
-          <div className="bg-white rounded-3xl p-12 shadow-lg">
-            <div className="text-7xl mb-6">🛒</div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h1>
-            <p className="text-lg text-gray-600 mb-8">No has añadido ningún producto aún. ¡Explora nuestro catálogo!</p>
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-12 shadow-lg">
+            <div className="mb-6 flex justify-center text-gray-400 dark:text-gray-500"><Cart3 size={64} /></div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Tu carrito está vacío</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">No has añadido ningún producto aún. ¡Explora nuestro catálogo!</p>
             
             <Link
               href="/productos"
@@ -54,13 +56,13 @@ export default function CartPage() {
 
   // Carrito con productos
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-              🐟
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
+              <Fish size={26} color="#003087" />
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
@@ -78,15 +80,15 @@ export default function CartPage() {
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Link href="/" className="hover:text-[#003087]">Inicio</Link>
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <Link href="/" className="hover:text-[#003087] dark:hover:text-[#00A3E0]">Inicio</Link>
           <span>/</span>
-          <span className="text-gray-900 font-medium">Mi Carrito</span>
+          <span className="text-gray-900 dark:text-white font-medium">Mi Carrito</span>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <h1 className="text-5xl font-bold text-gray-900 mb-12">Mi Carrito</h1>
+        <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-12">Mi Carrito</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Lado izquierdo: Productos */}
@@ -95,20 +97,20 @@ export default function CartPage() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition"
                 >
                   <div className="flex gap-6">
                     {/* Icono del producto */}
                     <div className="w-24 h-24 bg-gradient-to-br from-[#003087] to-[#00A3E0] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <span className="text-5xl">🐟</span>
+                      <Fish size={44} color="white" />
                     </div>
 
                     {/* Información del producto */}
                     <div className="flex-1">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 className="text-2xl font-bold text-gray-900">{item.name}</h3>
-                          <p className="text-sm text-gray-500">{item.presentation}</p>
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{item.name}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{item.presentation}</p>
                         </div>
                         <button
                           onClick={() => removeFromCart(item.id)}
@@ -119,22 +121,22 @@ export default function CartPage() {
                       </div>
 
                       <div className="flex justify-between items-center mt-4">
-                        <p className="text-2xl font-bold text-[#003087]">
+                        <p className="text-2xl font-bold text-[#003087] dark:text-[#00A3E0]">
                           ${(item.price * item.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                         </p>
 
                         {/* Controles de cantidad */}
-                        <div className="flex items-center gap-3 bg-gray-100 rounded-lg p-1">
+                        <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                           <button
                             onClick={() => decreaseQuantity(item.id)}
-                            className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded transition"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded transition"
                           >
                             −
                           </button>
-                          <span className="w-8 text-center font-bold text-gray-900">{item.quantity}</span>
+                          <span className="w-8 text-center font-bold text-gray-900 dark:text-white">{item.quantity}</span>
                           <button
                             onClick={() => increaseQuantity(item.id)}
-                            className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded transition"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded transition"
                           >
                             +
                           </button>
@@ -164,15 +166,15 @@ export default function CartPage() {
 
           {/* Lado derecho: Resumen */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl p-8 shadow-lg sticky top-32 border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Resumen del Pedido</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg sticky top-32 border border-gray-100 dark:border-gray-700">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Resumen del Pedido</h2>
 
               {/* Items list summary */}
-              <div className="space-y-3 mb-6 pb-6 border-b">
+              <div className="space-y-3 mb-6 pb-6 border-b dark:border-gray-700">
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
-                    <span className="text-gray-600">{item.name} x{item.quantity}</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="text-gray-600 dark:text-gray-300">{item.name} x{item.quantity}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">
                       ${(item.price * item.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
@@ -181,16 +183,16 @@ export default function CartPage() {
 
               {/* Costos */}
               <div className="space-y-4 mb-6">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300">
                   <span>Subtotal</span>
                   <span>${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300">
                   <span>Envío</span>
                   <span className="text-green-600 font-medium">Gratis</span>
                 </div>
-                <div className="flex justify-between text-lg font-bold bg-blue-50 p-4 rounded-lg">
-                  <span>Total</span>
+                <div className="flex justify-between text-lg font-bold bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                  <span className="text-gray-900 dark:text-white">Total</span>
                   <span className="text-[#00A3E0]">
                     ${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
                   </span>
@@ -207,7 +209,7 @@ export default function CartPage() {
                 </button>
                 <button
                   onClick={() => router.push('/productos')}
-                  className="w-full bg-gray-100 text-gray-900 py-4 rounded-xl font-semibold hover:bg-gray-200 transition"
+                  className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white py-4 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 >
                   Seguir Comprando
                 </button>

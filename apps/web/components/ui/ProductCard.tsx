@@ -1,5 +1,7 @@
 'use client';
 
+import { Fish } from './FishIcon';
+
 interface Product {
   id: number;
   name: string;
@@ -16,25 +18,25 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
   return (
-    <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all">
+    <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all">
       <div className="h-64 bg-gradient-to-br from-[#003087] to-[#00A3E0] flex items-center justify-center">
-        <span className="text-8xl">🐟</span>
+        <Fish size={80} color="white" />
       </div>
 
       <div className="p-8">
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-2xl font-semibold">{product.name}</h3>
+          <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{product.name}</h3>
           <span className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium">
             {product.presentation}
           </span>
         </div>
 
-        <p className="text-gray-600 mb-8">{product.description}</p>
+        <p className="text-gray-600 dark:text-gray-300 mb-8">{product.description}</p>
 
         <div className="flex items-end justify-between">
           <div>
-            <span className="text-4xl font-bold text-[#003087]">${product.price}</span>
-            <span className="text-gray-500"> MXN</span>
+            <span className="text-4xl font-bold text-[#003087] dark:text-[#00A3E0]">${product.price}</span>
+            <span className="text-gray-500 dark:text-gray-400"> MXN</span>
           </div>
           <button
             onClick={() => onAddToCart(product)}

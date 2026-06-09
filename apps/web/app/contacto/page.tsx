@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { Fish } from '../../components/ui/FishIcon';
+import { Cart3, GeoAltFill, EnvelopeFill, PhoneFill } from 'react-bootstrap-icons';
 import { useCartStore } from '../lib/cartStore';
 import CartModal from '../../components/ui/CartModal';
 
@@ -18,13 +20,13 @@ export default function ContactoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans flex flex-col">
       {/* HEADER */}
       <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-              🐟
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
+              <Fish size={26} color="#003087" />
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
@@ -44,7 +46,7 @@ export default function ContactoPage() {
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl transition-all"
           >
-            <span className="text-2xl">🛒</span>
+            <Cart3 size={22} />
             <div className="text-left">
               <div className="text-sm font-medium">Carrito</div>
               <div className="text-xs opacity-75">
@@ -56,10 +58,10 @@ export default function ContactoPage() {
       </header>
 
       {/* HERO SECTION */}
-      <section className="bg-gray-100 py-16 text-center border-b border-gray-200">
+      <section className="bg-gray-100 dark:bg-gray-800 py-16 text-center border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-4xl mx-auto px-6">
-          <h1 className="text-5xl font-bold mb-4 text-[#003087]">Contáctanos</h1>
-          <p className="text-xl text-gray-600">
+          <h1 className="text-5xl font-bold mb-4 text-[#003087] dark:text-[#00A3E0]">Contáctanos</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             ¿Tienes dudas, sugerencias o quieres distribuir FishWish? Escríbenos.
           </p>
         </div>
@@ -71,57 +73,57 @@ export default function ContactoPage() {
           
           {/* Info Cards */}
           <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">Información de la empresa</h2>
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">Información de la empresa</h2>
             
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-6">
-              <div className="text-4xl">📍</div>
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-start gap-6">
+              <div className="text-[#003087]"><GeoAltFill size={36} /></div>
               <div>
                 <h3 className="font-bold text-xl text-[#003087] mb-2">Ubicación</h3>
-                <p className="text-gray-600">Puerto de Lerma<br/>San Francisco de Campeche, Campeche, México</p>
+                <p className="text-gray-600 dark:text-gray-300">Puerto de Lerma<br/>San Francisco de Campeche, Campeche, México</p>
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-6">
-              <div className="text-4xl">✉️</div>
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-start gap-6">
+              <div className="text-[#003087]"><EnvelopeFill size={36} /></div>
               <div>
                 <h3 className="font-bold text-xl text-[#003087] mb-2">Correo Electrónico</h3>
-                <p className="text-gray-600">hola@fishwish.com.mx</p>
+                <p className="text-gray-600 dark:text-gray-300">hola@fishwish.com.mx</p>
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-6">
-              <div className="text-4xl">📱</div>
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-start gap-6">
+              <div className="text-[#003087]"><PhoneFill size={36} /></div>
               <div>
                 <h3 className="font-bold text-xl text-[#003087] mb-2">Teléfono</h3>
-                <p className="text-gray-600">+52 (981) 123 4567</p>
+                <p className="text-gray-600 dark:text-gray-300">+52 (981) 123 4567</p>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-10 rounded-3xl shadow-lg border-t-8 border-[#00A3E0]">
-            <h2 className="text-2xl font-bold text-gray-800 mb-8">Envíanos un mensaje</h2>
+          <div className="bg-white dark:bg-gray-800 p-10 rounded-3xl shadow-lg border-t-8 border-[#00A3E0]">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-8">Envíanos un mensaje</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Nombre completo</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nombre completo</label>
                 <input 
                   type="text" 
                   required
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#003087] focus:ring-2 focus:ring-[#003087]/20 transition-all"
+                  className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-2xl focus:outline-none focus:border-[#003087] focus:ring-2 focus:ring-[#003087]/20 transition-all"
                   placeholder="Ej. Juan Pérez"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Correo electrónico</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Correo electrónico</label>
                 <input 
                   type="email" 
                   required
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#003087] focus:ring-2 focus:ring-[#003087]/20 transition-all"
+                  className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-2xl focus:outline-none focus:border-[#003087] focus:ring-2 focus:ring-[#003087]/20 transition-all"
                   placeholder="tu@correo.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Mensaje</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Mensaje</label>
                 <textarea 
                   required
                   rows={4}
@@ -146,7 +148,7 @@ export default function ContactoPage() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
             <h3 className="text-2xl font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
-              <span>🐟</span> FishWish
+              <Fish size={18} /> FishWish
             </h3>
             <p className="opacity-80">Salud en cada mordida. <br/>Snacks naturales de Campeche.</p>
           </div>

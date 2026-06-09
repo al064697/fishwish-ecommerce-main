@@ -1,5 +1,6 @@
 'use client';
 
+import { Fish } from './FishIcon';
 import { useCartStore } from '../../app/lib/cartStore';
 import Link from 'next/link';
 
@@ -15,7 +16,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
         {/* Header */}
         <div className="p-6 border-b flex justify-between items-center bg-[#003087] text-white">
           <h2 className="text-2xl font-semibold">Tu Carrito</h2>
@@ -35,25 +36,25 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
             items.map((item) => (
               <div key={item.id} className="flex gap-4 py-5 border-b last:border-0">
                 <div className="w-20 h-20 bg-gradient-to-br from-[#003087] to-[#00A3E0] rounded-2xl flex items-center justify-center flex-shrink-0">
-                  🐟
+                  <Fish size={32} color="white" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-lg">{item.name}</h4>
-                  <p className="text-sm text-gray-500">{item.presentation}</p>
-                  <p className="font-medium mt-1">${item.price} MXN</p>
+                  <h4 className="font-semibold text-lg text-gray-900 dark:text-white">{item.name}</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{item.presentation}</p>
+                  <p className="font-medium mt-1 text-gray-800 dark:text-gray-200">${item.price} MXN</p>
 
                   <div className="flex items-center gap-4 mt-4">
-                    <div className="flex border rounded-xl">
+                    <div className="flex border dark:border-gray-600 rounded-xl">
                       <button 
                         onClick={() => decreaseQuantity(item.id)}
-                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100"
+                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         −
                       </button>
-                      <span className="px-6 font-medium flex items-center">{item.quantity}</span>
+                      <span className="px-6 font-medium flex items-center text-gray-900 dark:text-white">{item.quantity}</span>
                       <button 
                         onClick={() => increaseQuantity(item.id)}
-                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100"
+                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         +
                       </button>
@@ -73,10 +74,10 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
         {/* Footer con botones */}
         {items.length > 0 && (
-          <div className="p-6 border-t bg-gray-50">
+          <div className="p-6 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
             <div className="flex justify-between text-xl font-semibold mb-6">
-              <span>Total</span>
-              <span>${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</span>
+              <span className="text-gray-900 dark:text-white">Total</span>
+              <span className="text-gray-900 dark:text-white">${totalPrice().toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</span>
             </div>
 
             <div className="flex flex-col gap-3">

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Fish } from '../../components/ui/FishIcon';
+import { Cart3, Bullseye, Eye, StarFill, MortarboardFill } from 'react-bootstrap-icons';
 import { useCartStore } from '../lib/cartStore';
 import CartModal from '../../components/ui/CartModal';
 
@@ -10,13 +12,13 @@ export default function AboutPage() {
   const { totalItems, totalPrice } = useCartStore();
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans flex flex-col">
       {/* HEADER */}
       <header className="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-              🐟
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
+              <Fish size={26} color="#003087" />
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">FishWish</h1>
@@ -36,7 +38,7 @@ export default function AboutPage() {
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl transition-all"
           >
-            <span className="text-2xl">🛒</span>
+            <Cart3 size={22} />
             <div className="text-left">
               <div className="text-sm font-medium">Carrito</div>
               <div className="text-xs opacity-75">
@@ -62,30 +64,30 @@ export default function AboutPage() {
         
         {/* Intro */}
         <div className="text-center space-y-6">
-          <h2 className="text-4xl font-bold text-[#003087]">¿Qué es FishWish?</h2>
-          <p className="text-xl text-gray-600 leading-relaxed">
+          <h2 className="text-4xl font-bold text-[#003087] dark:text-[#00A3E0]">¿Qué es FishWish?</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
             FishWish nace de la necesidad de ofrecer una alternativa saludable y natural para nuestras mascotas, al mismo tiempo que resolvemos un problema ambiental en las costas de Campeche. Transformamos los subproductos pesqueros en snacks deshidratados de alta calidad, ricos en proteínas y Omega 3.
           </p>
         </div>
 
         {/* Mision, Vision, Valores Grid */}
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow">
-            <div className="text-5xl mb-4">🎯</div>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+            <div className="mb-4 flex justify-center"><Bullseye size={44} color="#003087" /></div>
             <h3 className="text-2xl font-bold text-[#003087] mb-4">Misión</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Brindar nutrición excepcional a las mascotas mediante snacks 100% naturales, fomentando la economía circular y el aprovechamiento responsable de los recursos marinos.
             </p>
           </div>
-          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow">
-            <div className="text-5xl mb-4">👁️</div>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+            <div className="mb-4 flex justify-center"><Eye size={44} color="#003087" /></div>
             <h3 className="text-2xl font-bold text-[#003087] mb-4">Visión</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Ser la marca líder en México de premios naturales para mascotas con enfoque sustentable, reconociendo el valor de las comunidades pesqueras locales.
             </p>
           </div>
-          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow">
-            <div className="text-5xl mb-4">⭐</div>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+            <div className="mb-4 flex justify-center"><StarFill size={44} color="#003087" /></div>
             <h3 className="text-2xl font-bold text-[#003087] mb-4">Valores</h3>
             <ul className="text-gray-600 space-y-2">
               <li>• Sustentabilidad</li>
@@ -97,18 +99,18 @@ export default function AboutPage() {
         </div>
 
         {/* UACAM Section */}
-        <div className="bg-[#003087]/5 p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10">
+        <div className="bg-[#003087]/5 dark:bg-gray-800 p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10">
           <div className="md:w-1/3 flex justify-center">
-            <div className="w-40 h-40 bg-white rounded-full flex items-center justify-center shadow-md text-6xl">
-              🎓
+            <div className="w-40 h-40 bg-white rounded-full flex items-center justify-center shadow-md">
+              <MortarboardFill size={64} color="#003087" />
             </div>
           </div>
           <div className="md:w-2/3">
             <h3 className="text-3xl font-bold text-[#003087] mb-4">Orgullo UACAM</h3>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Este proyecto es orgullosamente impulsado por estudiantes del <strong>Taller de Emprendedores</strong> de la <strong>Universidad Autónoma de Campeche (UACAM)</strong>. 
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
               Combinamos los conocimientos académicos con la acción real para crear un modelo de negocio que beneficia a las mascotas, a los pescadores y al medio ambiente de nuestro bello estado.
             </p>
           </div>
@@ -121,7 +123,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
             <h3 className="text-2xl font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
-              <span>🐟</span> FishWish
+              <Fish size={18} /> FishWish
             </h3>
             <p className="opacity-80">Salud en cada mordida. <br/>Snacks naturales de Campeche.</p>
           </div>

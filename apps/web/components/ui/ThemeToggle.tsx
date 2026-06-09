@@ -2,11 +2,14 @@
 
 import { useTheme } from './ThemeProvider';
 import { useEffect, useState } from 'react';
+import { SunFill, MoonFill, Display } from 'react-bootstrap-icons';
 
-const options: { value: 'light' | 'dark' | 'system'; label: string; icon: string }[] = [
-  { value: 'light',  label: 'Claro',  icon: '☀️' },
-  { value: 'dark',   label: 'Oscuro', icon: '🌙' },
-  { value: 'system', label: 'Auto',   icon: '💻' },
+type ThemeOption = { value: 'light' | 'dark' | 'system'; label: string; icon: React.ReactNode };
+
+const options: ThemeOption[] = [
+  { value: 'light',  label: 'Claro',  icon: <SunFill size={15} /> },
+  { value: 'dark',   label: 'Oscuro', icon: <MoonFill size={15} /> },
+  { value: 'system', label: 'Auto',   icon: <Display size={15} /> },
 ];
 
 export default function ThemeToggle() {
@@ -25,7 +28,7 @@ export default function ThemeToggle() {
       title={`Cambiar a modo ${next.label}`}
       className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-2 rounded-xl transition-all text-sm font-medium text-white"
     >
-      <span>{current.icon}</span>
+      <span className="flex items-center">{current.icon}</span>
       <span className="hidden sm:inline">{current.label}</span>
     </button>
   );
