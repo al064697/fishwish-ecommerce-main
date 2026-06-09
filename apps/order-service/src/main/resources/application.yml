@@ -14,7 +14,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false  # ⚠️ CAMBIAR A FALSE EN PRODUCCIÓN
+    show-sql: false
     properties:
       hibernate:
         format_sql: false
@@ -22,3 +22,5 @@ spring:
 app:
   product-service:
     url: ${PRODUCT_SERVICE_URL:http://localhost:8081/api/products}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
