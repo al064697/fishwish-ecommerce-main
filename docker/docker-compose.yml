@@ -33,13 +33,7 @@ services:
       dockerfile: Dockerfile
     container_name: fishwish-product-service
     ports:
-      - "8081:8081"
-    environment:
-      - PGHOST=postgres
-      - PGPORT=5432
-      - PGDATABASE=fishwish
-      - PGUSER=fishwish
-      - PGPASSWORD=fishwish123
+      - "8091:8081"
     depends_on:
       - postgres
 
@@ -49,7 +43,7 @@ services:
       dockerfile: Dockerfile
     container_name: fishwish-order-service
     ports:
-      - "8082:8082"
+      - "8092:8082"
     environment:
       - PGHOST=postgres
       - PGPORT=5432
@@ -57,6 +51,7 @@ services:
       - PGUSER=fishwish
       - PGPASSWORD=fishwish123
       - PRODUCT_SERVICE_URL=http://product-service:8081/api/products
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000
     depends_on:
       - postgres
       - product-service
