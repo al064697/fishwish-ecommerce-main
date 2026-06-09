@@ -1,0 +1,4 @@
+com/fishwish/product/ProductApplication.class
+com/fishwish/product/controller/ProductController.class
+com/fishwish/product/model/Product.class
+com/fishwish/product/config/CorsConfig.class
